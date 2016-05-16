@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 import pprint
 import re
+import sys
 
+if len(sys.argv) != 2:
+  print('please specify filenames')
+  sys.exit(1)
+
+font_filename = sys.argv[1]
 glyph_codes = []
 pat = re.compile(r'0x([\da-f]+)', re.I)
 glyph_list = './glyph-list.txt'
