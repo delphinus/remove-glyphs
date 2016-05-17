@@ -2,6 +2,7 @@
 import fontforge
 import os
 import pprint
+import psMat
 import re
 import sys
 
@@ -10,7 +11,7 @@ if len(sys.argv) != 3:
   sys.exit(1)
 
 source_font_filename = sys.argv[1]
-font_filename = sys.argv[2]
+dest_font_filename = sys.argv[2]
 glyph_codes = []
 pat = re.compile(r'0x([\da-f]+)', re.I)
 glyph_list = './glyph-list.txt'
@@ -21,11 +22,9 @@ with open(glyph_list, 'r') as f:
       glyph_codes.append(int(m.group(1), 16))
 
 sw_font = fontforge.open(source_font_filename)
-dw_font = fontforge.open(font_filename)
-
-for code in glyph_codes:
-  sw_font.selection.select(('more', 'unicode'), code)
-  dw_font.selection.select(('more', 'unicode'), code)
+dw_font = fontforge.open(dest_font_filename)
+scale_size = 0.87
+y_move = 40.0
 
 for code in glyph_codes:
   print(code)
@@ -33,6 +32,8 @@ for code in glyph_codes:
   sw_font.copy()
   dw_font.selection.select(code)
   dw_font.paste()
+  dw_font.transform(psMat.scale(scale_size))
+  dw_font.transform(psMat.translate(0, y_move))
 
 font_pat = re.compile(r'^([^-]*).*?([^-]*(?!.*-))$')
 dw_font.familyname += ' Reduced'
@@ -44,6 +45,6 @@ dw_font.appendSFNTName('English (US)', 'Preferred Family', dw_font.familyname)
 dw_font.appendSFNTName('English (US)', 'Compatible Full', dw_font.fullname)
 dw_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
 
-dest = os.path.basename(font_filename).replace('.', '-Reduced.')
+dest = os.path.basename(dest_font_filename).replace('.', '-Reduced.')
 dw_font.generate(dest)
 print('{0} generated'.format(dw_font.fullname))
