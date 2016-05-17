@@ -38,4 +38,4 @@ source_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
 
 dest = os.path.basename(font_filename).replace('.', '-Reduced.')
 source_font.generate(dest)
-print('{0} generated'.format(new_fontname))
+print('{0} generated'.format(source_font.fullname))
