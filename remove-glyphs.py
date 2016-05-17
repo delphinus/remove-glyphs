@@ -5,11 +5,12 @@ import pprint
 import re
 import sys
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
   print('please specify filenames')
   sys.exit(1)
 
-font_filename = sys.argv[1]
+source_font_filename = sys.argv[1]
+font_filename = sys.argv[2]
 glyph_codes = []
 pat = re.compile(r'0x([\da-f]+)', re.I)
 glyph_list = './glyph-list.txt'
@@ -19,23 +20,30 @@ with open(glyph_list, 'r') as f:
     if m:
       glyph_codes.append(int(m.group(1), 16))
 
-source_font = fontforge.open(font_filename)
+sw_font = fontforge.open(source_font_filename)
+dw_font = fontforge.open(font_filename)
 
 for code in glyph_codes:
-  source_font.selection.select(('more', 'unicode'), code)
-  for glyph in source_font.selection.byGlyphs:
-    source_font.removeGlyph(glyph)
+  sw_font.selection.select(('more', 'unicode'), code)
+  dw_font.selection.select(('more', 'unicode'), code)
+
+for code in glyph_codes:
+  print(code)
+  sw_font.selection.select(code)
+  sw_font.copy()
+  dw_font.selection.select(code)
+  dw_font.paste()
 
 font_pat = re.compile(r'^([^-]*).*?([^-]*(?!.*-))$')
-source_font.familyname += ' Reduced'
-fullname, fallbackStyle = font_pat.match(source_font.fullname).groups()
-source_font.fullname = fullname + ' Reduced ' + fallbackStyle
-fontname, fallbackStyle = font_pat.match(source_font.fontname).groups()
-source_font.fontname = fontname + 'Reduced-' + fallbackStyle
-source_font.appendSFNTName('English (US)', 'Preferred Family', source_font.familyname)
-source_font.appendSFNTName('English (US)', 'Compatible Full', source_font.fullname)
-source_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
+dw_font.familyname += ' Reduced'
+fullname, fallbackStyle = font_pat.match(dw_font.fullname).groups()
+dw_font.fullname = fullname + ' Reduced ' + fallbackStyle
+fontname, fallbackStyle = font_pat.match(dw_font.fontname).groups()
+dw_font.fontname = fontname + 'Reduced-' + fallbackStyle
+dw_font.appendSFNTName('English (US)', 'Preferred Family', dw_font.familyname)
+dw_font.appendSFNTName('English (US)', 'Compatible Full', dw_font.fullname)
+dw_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
 
 dest = os.path.basename(font_filename).replace('.', '-Reduced.')
-source_font.generate(dest)
-print('{0} generated'.format(source_font.fullname))
+dw_font.generate(dest)
+print('{0} generated'.format(dw_font.fullname))
