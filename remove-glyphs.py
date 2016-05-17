@@ -26,15 +26,15 @@ for code in glyph_codes:
   for glyph in source_font.selection.byGlyphs:
     source_font.removeGlyph(glyph)
 
-fontname, fallbackStyle = re.match("^([^-]*).*?([^-]*(?!.*-))$", source_font.fontname).groups()
-new_fontname = fontname + ' Reduced'
-source_font.familyname = new_fontname
-source_font.fullname = new_fontname + ' ' + fallbackStyle
-source_font.fontname = new_fontname.replace(' ', '') + '-' + fallbackStyle
+font_pat = re.compile(r'^([^-]*).*?([^-]*(?!.*-))$')
+source_font.familyname += ' Reduced'
+fullname, fallbackStyle = font_pat.match(source_font.fullname).groups()
+source_font.fullname = fullname + ' Reduced ' + fallbackStyle
+fontname, fallbackStyle = font_pat.match(source_font.fontname).groups()
+source_font.fontname = fontname + 'Reduced-' + fallbackStyle
 source_font.appendSFNTName('English (US)', 'Preferred Family', source_font.familyname)
 source_font.appendSFNTName('English (US)', 'Compatible Full', source_font.fullname)
 source_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
-
 
 dest = os.path.basename(font_filename).replace('.', '-Reduced.')
 source_font.generate(dest)
