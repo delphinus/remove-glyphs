@@ -25,7 +25,7 @@ sw_font = fontforge.open(source_font_filename)
 dw_font = fontforge.open(dest_font_filename)
 
 scale_size = 1.0
-y_move = -40.0
+y_move = 40.0
 #scale_size = 0.90
 #y_move = 40.0
 #powerline_codes = range(0xe0b0, 0xe0b3)
