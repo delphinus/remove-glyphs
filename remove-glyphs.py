@@ -26,11 +26,6 @@ dw_font = fontforge.open(dest_font_filename)
 
 scale_size = 1.0
 y_move = 40.0
-#scale_size = 0.90
-#y_move = 40.0
-#powerline_codes = range(0xe0b0, 0xe0b3)
-#powerline_scale_size = 0.87
-#powerline_y_move = 40.0
 
 for code in glyph_codes:
   print(code)
@@ -38,12 +33,6 @@ for code in glyph_codes:
   sw_font.copy()
   dw_font.selection.select(code)
   dw_font.paste()
-#  if code in powerline_codes:
-#    dw_font.transform(psMat.scale(powerline_scale_size))
-#    dw_font.transform(psMat.translate(0, powerline_y_move))
-#  else:
-#    dw_font.transform(psMat.scale(scale_size))
-#    dw_font.transform(psMat.translate(0, y_move))
   dw_font.transform(psMat.scale(scale_size))
   dw_font.transform(psMat.translate(0, y_move))
 
