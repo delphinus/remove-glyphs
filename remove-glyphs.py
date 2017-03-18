@@ -33,7 +33,6 @@ y_move = -40.0
 #powerline_y_move = 40.0
 
 for code in glyph_codes:
-  print(code)
   sw_font.selection.select(code)
   sw_font.copy()
   dw_font.selection.select(code)
