@@ -8,4 +8,9 @@ do
   echo $i
   ./remove-glyphs.py ~/Shared/Documents/fonts/Iosevka/iosevka-pack-1.11.4/iosevka-regular.ttc $i
 done
+for i in /usr/local/opt/ricty/share/fonts/*
+do
+  echo $i
+  ./remove-glyphs.py ~/Shared/Documents/fonts/Iosevka/iosevka-pack-1.11.4/iosevka-regular.ttc $i
+done
 ```
