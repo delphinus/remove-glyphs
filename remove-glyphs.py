@@ -49,9 +49,13 @@ for code in glyph_codes:
 font_pat = re.compile(r'^([^-]*).*?([^-]*(?!.*-))$')
 dw_font.familyname += ' Reduced'
 fullname, fallbackStyle = font_pat.match(dw_font.fullname).groups()
-dw_font.fullname = fullname + ' Reduced ' + fallbackStyle
+dw_font.fullname = fullname + ' Reduced'
+if fallbackStyle != '':
+  dw_font.fullname += ' ' + fallbackStyle
 fontname, fallbackStyle = font_pat.match(dw_font.fontname).groups()
-dw_font.fontname = fontname + 'Reduced-' + fallbackStyle
+dw_font.fontname = fontname + 'Reduced'
+if fallbackStyle != '':
+  dw_font.fontname += '-' + fallbackStyle
 dw_font.appendSFNTName('English (US)', 'Preferred Family', dw_font.familyname)
 dw_font.appendSFNTName('English (US)', 'Compatible Full', dw_font.fullname)
 dw_font.appendSFNTName('English (US)', 'SubFamily', fallbackStyle)
